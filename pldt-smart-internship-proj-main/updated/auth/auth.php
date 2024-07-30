@@ -242,6 +242,29 @@
                 throw $th;
             }
         }
+        public function processRegisterInAdmin(){
+            $conn = $this->conn;
+
+            // get all the values from the form
+            $fname = $_POST['fname'];
+            $lname = $_POST['lname'];
+            $email = $_POST['email'];
+            $password = $_POST['password'];
+            $department = $_POST['department'];
+            $position = $_POST['position'];
+            
+            // all caps the position
+            $position = strtoupper($position);
+
+            try {
+                $sql = "INSERT INTO Users (email,password, role) VALUES ('$email', '$password', 'employee')";
+                $sql2 = "INSERT INTO userinformation(fname, lname, phone_number, Position, Department) VALUES ('$fname', '$lname', 0000 , '$position', '$department')";
+                $conn->query($sql);
+                $conn->query($sql2);
+            } catch (\Throwable $th) {
+                throw $th;
+            }
+        }
 
         public function updateEmployee(){
             $conn = $this->conn;
@@ -402,6 +425,8 @@
 
     if($authType == 'register'){
         Database::getInstance()->processRegister();
+    }else if($authType == 'registerinadmin'){
+        Database::getInstance()->processRegisterInAdmin();
     } else if($authType == 'login'){
         Database::getInstance()->processLogin();
     } else if($authType == 'logout'){

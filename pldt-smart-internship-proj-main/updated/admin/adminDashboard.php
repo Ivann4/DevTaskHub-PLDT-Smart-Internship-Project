@@ -59,7 +59,7 @@ $dashboard->render();
             const form = document.getElementById('form1');
             const formData = new FormData(form);
             console.log(formData);
-            var value = fetch('../auth/auth.php?authType=register', {
+            var value = fetch('../auth/auth.php?authType=registerinadmin', {
                 method: 'POST',
                 body: formData
             });
@@ -224,8 +224,7 @@ then(data => {
             var newTitle = document.getElementById('edit-title').value;
             var newPriority = document.getElementById('edit-priority').value;
             var newProponent = document.getElementById('edit-proponent').value;
-            var newDepartment = document.getElementById('edit-department').value;
-            console.log(newTitle, newPriority, newProponent, newDepartment);
+            console.log(newTitle, newPriority, newProponent);
 
             var priorityClass = "";
             if(newPriority === 'High !!!') {
@@ -241,7 +240,7 @@ then(data => {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({task_id: real_id, task_name: newTitle, priority: priorityClass, user_id: newProponent, Department: newDepartment})
+                body: JSON.stringify({task_id: real_id, task_name: newTitle, priority: priorityClass, user_id: newProponent})
             });
 
             window.location.href = "adminDashboard.php";
