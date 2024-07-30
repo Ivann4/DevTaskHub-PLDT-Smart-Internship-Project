@@ -117,8 +117,8 @@
                     <option value="transport">Transport Network Facilities Management</option>
                     <option value="cybersecurity">Cybersecurity</option>
                 </select>
-                <label for="role">Position:</label>
-                <select name="role" id="role" class="input-field">
+                <label for="position">Position:</label>
+                <select name="position" id="position" class="input-field">
                     <!-- Options will be dynamically populated based on the department selection -->
                 </select>
                 <button type="button" class="submit-button" onclick="submitForm()">Submit</button>
@@ -155,7 +155,7 @@
 
         function updateRoleOptions() {
             const department = document.getElementById('department').value;
-            const role = document.getElementById('role');
+            const role = document.getElementById('position');
             
             // Clear existing options
             role.innerHTML = '';
@@ -171,7 +171,7 @@
             if (department in roles) {
                 roles[department].forEach(roleName => {
                     const option = document.createElement('option');
-                    option.value = roleName.toLowerCase().replace(/\s+/g, '');
+                    option.value = roleName;
                     option.textContent = roleName;
                     role.appendChild(option);
                 });

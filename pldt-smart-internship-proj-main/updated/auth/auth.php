@@ -74,8 +74,10 @@
         }
 
         public function createTask(){
-
+            // echo '<script>alert("ALERT")</script>';
             $_POST = json_decode(file_get_contents('php://input'), true);
+
+            echo "<script>console.log('fnk log');</script>";
 
             $user_id = $_POST['empId'];
             $task_name = $_POST['task_name'];
@@ -125,19 +127,19 @@
             return $result;
         }
 
+        public function getTasksByLimitAdminStatus($limit) {
+            $sql = "SELECT * FROM Tasks INNER JOIN UserInformation WHERE Tasks.user_id = UserInformation.userInfo_id LIMIT ".$limit;
+            $result = $this->conn->query($sql);
+            return $result;
+        }
+
         public function getTasksByLimitAdminUser(){
-            $POST = json_decode(file_get_contents('php://input'), true);
+            // $POST = json_decode(file_get_contents('php://input'), true);
             
-            $empId = $POST['empId'];
-            $limit = $POST['limit'];
+            $empId = $_POST['empId'];
+            $limit = $_POST['limit'];
             $sql = "SELECT * FROM UserInformation INNER JOIN Tasks WHERE status != 'COMPLETE' AND Tasks.user_id = UserInformation.userInfo_id AND Tasks.user_id = '$empId' LIMIT ".$limit;
             $result = $this->conn->query($sql);
-            $resultArray = [];
-            while($row = $result->fetch_assoc()) {
-                array_push($resultArray, $row);
-            }
-            $result = json_encode($resultArray);
-            echo $result;
             return $result;
         }
 
@@ -226,32 +228,23 @@
             $password = $_POST['password'];
             $role = $_SESSION['role'];
             $department = $_POST['department'];
-            $position = $_POST['role'];
+            $position = $_POST['position'];
             
             // all caps the position
             $position = strtoupper($position);
-            
-            // query to insert the user into the database
-            $sql = "INSERT INTO Users (email,password, role) VALUES ('$email', '$password', '$role')";
-            if ($conn->query($sql) === TRUE) {
-                // query to insert the userinfo into the database
-                $sql = "INSERT INTO UserInformation(fname, lname, phone_number, department) VALUES ('$fname', '$lname','00000', '$department')";
-                if ($conn->query($sql) === TRUE) {
-                    header('Location: login.php');
-                    exit;
-                } else {
-                    echo 'Error: ' . $sql . '<br>' . $conn->error;
-                }
-            } else {
-                echo 'Error: ' . $sql . '<br>' . $conn->error;
+
+            try {
+                $sql = "INSERT INTO Users (email,password, role) VALUES ('$email', '$password', '$role')";
+                $sql2 = "INSERT INTO userinformation(fname, lname, phone_number, Position, Department) VALUES ('$fname', '$lname', 0000 , '$position', '$department')";
+                $conn->query($sql);
+                $conn->query($sql2);
+            } catch (\Throwable $th) {
+                throw $th;
             }
         }
 
         public function updateEmployee(){
             $conn = $this->conn;
-
-            $_POST = json_decode(file_get_contents('php://input'), true);
-
             // get all the values from the form
             $fname = $_POST['fname'];
             $lname = $_POST['lname'];
@@ -296,10 +289,10 @@
             }
         }
 
-        public function updateTaskStatus($task, $status) {
+        public function updateTaskStatus($task_id, $status) {
             $empId = $_SESSION['empId'];
             $conn = $this->conn;
-            $sql = "UPDATE Tasks SET status = '$status' WHERE task_name= '$task' AND user_id = '$empId'";
+            $sql = "UPDATE Tasks SET status = '$status' WHERE task_id= '$task_id' AND user_id = '$empId'";
             if ($conn->query($sql) === TRUE) {
                 echo json_encode(['success' => true]);
             } else {
@@ -417,7 +410,6 @@
         Database::getInstance()->initializeAssignedTasks($_SESSION['empId']);
     }elseif($authType == '2'){
         $tasks = Database::getInstance()->getTasksBasedOnDate(date('Y-m-d', strtotime('+7 days')));
-        if($tasks > 0) {
             while($row = $tasks->fetch_assoc()) {
                 echo '<div class="deadline-card">';
                 echo '<div class="content">';
@@ -426,7 +418,6 @@
                 echo '</div>';
                 echo '</div>';
             }
-        }
 
     }elseif($authType == '3'){  
         if(!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
@@ -465,16 +456,16 @@
         }
         return Database::getInstance()->deleteTask();
     }elseif($authType == '9'){
-        if(!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
-            header('Location: ../auth/login.php');
-            exit;
-        }
-        return Database::getInstance()->createTask();
+        // if(!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
+        //     header('Location: ../auth/login.php');
+        //     exit;
+        // }
+        Database::getInstance()->createTask();
     }elseif($authType == '10'){
-        if(!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
-            header('Location: ../auth/login.php');
-            exit;
-        }
+        // if(!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
+        //     header('Location: ../auth/login.php');
+        //     exit;
+        // }
         return Database::getInstance()->getTasksByLimitAdminUser();
     }
 else{

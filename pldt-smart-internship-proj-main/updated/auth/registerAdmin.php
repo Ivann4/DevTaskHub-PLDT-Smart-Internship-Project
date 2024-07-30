@@ -98,10 +98,10 @@ session_start();
             <hr class="divider" />
             <h2 class="form-title">Account Registration</h2>
             <form id="form1">
-                <input type="text" placeholder="First Name" class="input-field" />
-                <input type="text" placeholder="Last Name" class="input-field" />
-                <input type="email" placeholder="Email" class="input-field" />
-                <input type="password" placeholder="Password" class="input-field" />
+                <input type="text" placeholder="First Name" class="input-field" name="fname"/>
+                <input type="text" placeholder="Last Name" class="input-field" name="lname"/>
+                <input type="email" placeholder="Email" class="input-field" name="email"/>
+                <input type="password" placeholder="Password" class="input-field" name="password"/>
                 <button type="button" class="submit-button" onclick="nextPage()">Next</button>
             </form>
         </div>
@@ -118,8 +118,8 @@ session_start();
                     <option value="transport">Transport Network Facilities Management</option>
                     <option value="cybersecurity">Cybersecurity</option>
                 </select>
-                <label for="role">Position:</label>
-                <select name="role" id="role" class="input-field">
+                <label for="position">Position:</label>
+                <select name="position" id="position" class="input-field">
                     <!-- Options will be dynamically populated based on the department selection -->
                 </select>
                 <button type="button" class="submit-button" onclick="submitForm()">Submit</button>
@@ -133,13 +133,28 @@ session_start();
         }
 
         function submitForm() {
+            const form1 = document.getElementById('form1');
+            const form2 = document.getElementById('form2');
+
+            // Combine the form data from both pages
+            const formData = new FormData(form1);
+            const formData2 = new FormData(form2);
+            for (const [key, value] of formData2.entries()) {
+                formData.append(key, value);
+            }
+
+            // Submit the combined form data then go back to login
+            fetch('auth.php?authType=register', {
+                method: 'POST',
+                body: formData
+            });
             alert('Form submitted!');
             window.location.href = 'login.php';
         }
 
         function updateRoleOptions() {
             const department = document.getElementById('department').value;
-            const role = document.getElementById('role');
+            const role = document.getElementById('position');
             
             // Clear existing options
             role.innerHTML = '';

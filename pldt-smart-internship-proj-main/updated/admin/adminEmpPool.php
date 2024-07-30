@@ -88,7 +88,7 @@
                 </tr>
             </thead>
             <?php
-                require_once($_SERVER['DOCUMENT_ROOT'] . '/pldt-smart-internship-proj-main/updated/auth/auth.php');
+                require_once('../auth/auth.php');
                 $db = Database::getInstance();
                 $db->initializeAssignedTasks($_SESSION['empId']);
                 $resullt = $db->getAllEmployees();

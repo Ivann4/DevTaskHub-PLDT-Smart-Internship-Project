@@ -1,6 +1,6 @@
 <?php
     session_start();
-    require_once($_SERVER['DOCUMENT_ROOT'] . '/pldt-smart-internship-proj-main/updated/auth/auth.php');
+    require_once('../auth/auth.php');
     $db = Database::getInstance();
 ?>
 <style>
@@ -103,7 +103,7 @@
     }
 </style>
 <!-- <?php 
-    require_once(__DIR__.'auth.php');
+    require_once('../auth/auth.php');
     $db->initializeAssignedTasks($_SESSION['empId']);
 ?> -->
 
@@ -159,7 +159,7 @@
     if($tasks->num_rows > 0) {
         while($row = $tasks->fetch_assoc()) {
             echo '<tr>';
-            echo '<td><a href="#" onclick="showPopup(\''.$row['task_name'].'\', \''.$row['author'].'\', \''.$row['assignee'].'\', \''.$row['deadline'].'\', \''.$row['description'].'\'); return false;">'.$row['task_name'].'</a></td>';
+            echo '<td> <p>'.$row['task_name'].' </p></td>';
             echo '<td>'.$row['deadline'].'</td>';
             echo '<td class="'.$row['priority'].'">'.$row['priority'].'</td>';
             echo '<td class="actions">';
@@ -169,7 +169,7 @@
             echo '<option value="In Progress">In Progress</option>';
             echo '<option value="Not Started">Not Started</option>';
             echo '</select>';
-            echo '<button type="button" onclick="clickButtonEvent(this)">Submit</button>';
+            echo '<button type="button" onclick="clickButtonEvent(this, '.$row['task_id'].')">Submit</button>';
             echo '</td>';
             echo '</tr>';
         }
@@ -183,22 +183,16 @@
     <div class="popup-content">
         <span class="close" onclick="hidePopup()">&times;</span>
         <h2 id="popup-title"></h2>
-        <p><strong>Author:</strong> <span id="popup-author"></span></p>
-        <p><strong>Assignee:</strong> <span id="popup-assignee"></span></p>
         <p><strong>Deadline:</strong> <span id="popup-deadline"></span></p>
-        <p><strong>Description:</strong></p>
         <p id="popup-description"></p>
     </div>
 </div>
 
 <script>
        
-    function showPopup(title, author, assignee, deadline, description) {
+    function showPopup(title,deadline) {
         document.getElementById('popup-title').textContent = title;
-        document.getElementById('popup-author').textContent = author;
-        document.getElementById('popup-assignee').textContent = assignee;
         document.getElementById('popup-deadline').textContent = deadline;
-        document.getElementById('popup-description').textContent = description;
         document.getElementById('popup').style.display = 'block';
     }
 

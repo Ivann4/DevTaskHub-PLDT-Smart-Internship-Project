@@ -63,7 +63,7 @@
 <body>
     <div class="profile-card">
     <?php
-        require_once($_SERVER['DOCUMENT_ROOT'] . '/pldt-smart-internship-proj-main/updated/auth/auth.php');
+        require_once('../auth/auth.php');
         $db = Database::getInstance();
         $result = $db->getAllUserInformation();
         $row = $result->fetch_assoc();

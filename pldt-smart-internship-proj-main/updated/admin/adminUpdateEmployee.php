@@ -117,7 +117,7 @@
     </script>
 </head>
 <body>
-    <div class="form-container">
+    <form id="form1" class="form-container">
         <h2>Update Employee</h2>
         <div class="form-group">
             <label for="employee-id">Employee ID</label>
@@ -128,18 +128,11 @@
         </div>
         <div class="form-group">
             <label for="first-name">First Name</label>
-            <input type="text" id="first-name" name="first_name" placeholder="First Name">
+            <input type="text" id="first-name" name="fname" placeholder="First Name">
         </div>
         <div class="form-group">
             <label for="last-name">Last Name</label>
-            <input type="text" id="last-name" name="last_name" placeholder="Last Name">
-        </div>
-        <div class="form-section">
-            <h2>Contact Information</h2>
-        </div>
-        <div class="form-group full-width">
-            <label for="email">Email Address</label>
-            <input type="email" id="email" name="email" placeholder="Email Address">
+            <input type="text" id="last-name" name="lname" placeholder="Last Name">
         </div>
         <div class="form-section">
             <h2>Position and Department Information</h2>
@@ -167,5 +160,5 @@
                     Back
             </a>
         </div>
-    </div>
+    </form>
 </main>

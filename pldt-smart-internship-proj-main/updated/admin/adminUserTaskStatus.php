@@ -8,6 +8,8 @@
         header('Location: /auth/login.php');
         exit;
     }
+    require_once('../auth/auth.php');
+    $db = Database::getInstance();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -153,11 +155,11 @@
             }
         }
 
-        function processEmployeeName() {
-            const empID = document.getElementById('emp-id').value;
-            alert(`Processing Employee ID: ${empID}`);
-            // Add your code here to process the Employee ID
-        }
+        // function processEmployeeName() {
+        //     const empID = document.getElementById('emp-id').value;
+        //     alert(`Processing Employee ID: ${empID}`);
+        //     // Add your code here to process the Employee ID
+        // }
     </script>
 </head>
 <body>
@@ -166,11 +168,12 @@
             <div class="form-section">
                 <h2>User Reports</h2>
             </div>
-            <div class="form-group">
+            <form id="form1" class="form-group">
                 <label for="emp-name">Employee Name</label>
-                <input type="text" id="emp-name" name="emp-name" placeholder="Enter Employee ID for specific set of tasks for each employee">
+                <input type="text" id="empId" name="empId" placeholder="Enter Employee ID for specific set of tasks for each employee">
+                <input type="hidden" id="limit" name="limit" value="10">
                 <button onclick="processEmployeeName()">Submit</button>
-            </div>
+            </form>
         </div>
         <br>
         <table>
@@ -185,6 +188,28 @@
                 </tr>
             </thead>
             <tbody id="task-table-body">
+                <?php
+                    $tasks = $db->getTasksByLimitAdminStatus(20);
+                    while ($row = $tasks->fetch_assoc()) {
+                        $priorityClass = '';
+                        if ($row['priority'] === 'HIGH') {
+                            $priorityClass = 'high-priority';
+                        } else if ($row['priority'] === 'MODERATE') {
+                            $priorityClass = 'moderate-priority';
+                        } else {
+                            $priorityClass = 'low-priority';
+                        }
+                        echo '<tr id="task-' . $row['task_id'] . '">';
+                        echo '<td>'.$row['task_name'].'</td>';
+                        echo '<td id="task-"'.$row['task_id'].'-deadline >' . $row['deadline'] . '</td>';
+                        echo '<td class="' . $priorityClass . '">' . $row['priority'] . '</td>';
+                        echo '<td>' . $row['Department'] . '</td>';
+                        echo '<td>' . $row['fname'].' '. $row['lname'] . '</td>';
+                        echo '<td class="actions"> '.$row['status'].'';
+                        echo '</td>';
+                        echo '</tr>';
+                    }
+                ?>
             </tbody>
         </table>
     </main>

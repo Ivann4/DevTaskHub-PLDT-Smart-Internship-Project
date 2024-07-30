@@ -9,7 +9,7 @@
         header('Location: /auth/login.php');
         exit;
     }
-    require_once($_SERVER['DOCUMENT_ROOT'] . '/pldt-smart-internship-proj-main/updated/auth/auth.php');
+    require_once('../auth/auth.php');
     $db = Database::getInstance();
 ?>
 <style>
@@ -286,11 +286,11 @@
                         echo '<td id="task-"'.$row['task_id'].'-deadline >' . $row['deadline'] . '</td>';
                         echo '<td class="' . $priorityClass . '">' . $row['priority'] . '</td>';
                         echo '<td>' . $row['Department'] . '</td>';
-                        echo '<td>' . $row['user_id'] . '</td>';
+                        echo '<td>' . $row['fname'].' '. $row['lname'] . '</td>';
                         echo '<td class="actions">';
                         echo '<button class="edit-btn" onclick="editTask(\'task-'.$row['task_id'].'\', \''.$row['task_name'].'\' , \''.$row['priority'].'\' , \''.$row['user_id'].'\' , \''.$row['Department'].'\')">';
                         echo 'Edit</button>';
-                        echo '<button class="delete-btn" onclick="deleteTask(\'task-' . $row['task_id'] . '\')">Delete</button>';
+                        echo '<button class="delete-btn" onclick="deleteTask(\'task-'. $row['task_id'] . '\')">Delete</button>';
                         echo '</td>';
                         echo '</tr>';
                     }

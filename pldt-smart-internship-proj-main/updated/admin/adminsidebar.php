@@ -48,7 +48,7 @@
 <script>
 // on-click event for logout button
 document.querySelector('.logout-btn').addEventListener('click', () => {
-    fetch('/auth/auth.php?authType=logout');
+    fetch('../auth/auth.php?authType=logout');
     window.location.href = '../auth/login.php';
 });
 </script>

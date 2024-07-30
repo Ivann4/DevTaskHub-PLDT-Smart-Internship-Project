@@ -9,7 +9,7 @@ if(!isset($_SESSION['role']) || $_SESSION['role'] !== 'employee') {
     header('Location: /auth/login.php');
     exit;
 }   
-require_once($_SERVER['DOCUMENT_ROOT'].'/pldt-smart-internship-proj-main/updated/auth/auth.php');
+require_once('../auth/auth.php');
 class empDashboard {
     private $user;
 
@@ -39,7 +39,7 @@ $dashboard->render();
 
 <script>
     // on-click event for submit button
-    function clickButtonEvent(elem){
+    function clickButtonEvent(elem, task_id){
         var select = elem.parentElement.querySelector('select');
         var selectedValue = select.value;
         // map selectedValue to db status (Accomplished -> COMPLETE, In Progress -> IN-PROGRESS, Not Started -> NOT STARTED)
@@ -50,15 +50,15 @@ $dashboard->render();
         } else if(selectedValue === 'Not Started') {
             selectedValue = 'NOT STARTED';
         }
-        var taskName = elem.parentElement.parentElement.querySelector('td a');
-        var task = taskName.textContent;
+        // var taskName = elem.parentElement.querySelector('td a');
+        // var task = taskName.textContent;
         var bodyValues = JSON.stringify({
-            task_id: task,
+            task_id: task_id,
             status: selectedValue
         });
         console.log(bodyValues);
 
-        fetch('/auth/updateTaskStatus.php', {
+        fetch('../auth/updateTaskStatus.php', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -67,6 +67,7 @@ $dashboard->render();
         }).then(function(response) {
             if(response.ok) {
                 alert('Task status updated successfully');
+                location.reload();
             } else {
                 alert('Failed to update task status');
             }

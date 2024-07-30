@@ -321,7 +321,7 @@
 
             function loadContent(contentId) {
                 // fetch to initialize assigned tasks
-                fetch('auth.php?authType=1');
+                fetch('../auth/auth.php?authType=1');
 
                 if (contentId === "tasks") {
                     fetch('mytasks.php?getTasks=1')

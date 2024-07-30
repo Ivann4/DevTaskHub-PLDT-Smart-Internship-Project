@@ -2,11 +2,11 @@
 <?php
     session_start();
     if (!isset($_SESSION['authenticated']) && $_SESSION['authenticated'] !== true) {
-        header('Location: /auth/login.php');
+        header('Location: ../auth/login.php');
         exit;
     }
     if(!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
-        header('Location: /auth/login.php');
+        header('Location: ../auth/login.php');
         exit;
     }
 ?>
@@ -26,7 +26,7 @@ class empDashboard {
         echo '<div class="dashboard">';
         include 'adminsidebar.php';
         include 'adminmain.php';
-        include 'adminright-sidebar.php';
+        // include 'adminright-sidebar.php';
         echo '</div>';
         include '../common/footer.php';
     }
@@ -46,46 +46,47 @@ $dashboard->render();
     function consolidateAllForms() {
         const fname = document.getElementById('first-name').value;
         const lname = document.getElementById('last-name').value;
+        const password = document.getElementById('password').value;
         const email = document.getElementById('email').value;
         const department = document.getElementById('department').value;
         const position = document.getElementById('position').value;
-        const employee_id = document.getElementById('employee-id').value;
-        return { fname, lname, email, department, position, employee_id};
+        return { fname, lname, password, email, department, position};
     }
     
     function addEmployee() {
         const confirmAdd = confirm("Are you sure you want to add this employee to the system?");
         if (confirmAdd) {
-            const employeeData = consolidateAllForms();
-            var value = fetch('/auth/auth.php?authType=3', {
+            const form = document.getElementById('form1');
+            const formData = new FormData(form);
+            console.log(formData);
+            var value = fetch('../auth/auth.php?authType=register', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(employeeData)
+                body: formData
             });
         }
+        location.reload();
     }
 
     function updateEmployee() {
         const confirmAdd = confirm("Are you sure you want to add this employee to the system?");
         if (confirmAdd) {
-            const employeeData = consolidateAllForms();
-            var value = fetch('/auth/auth.php?authType=4', {
+            const form = document.getElementById('form1');
+            const formData = new FormData(form);
+            console.log(form);
+            var value = fetch('../auth/auth.php?authType=4', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(employeeData)
+                body: formData
             });
         }
+        location.reload();
+
     }
 
     function deleteEmployee() {
         const confirmAdd = confirm("Are you sure you want to add this employee to the system?");
         if (confirmAdd) {
             const employee_id = document.getElementById('employee-id').value;
-            var value = fetch('/auth/auth.php?authType=5', {
+            var value = fetch('../auth/auth.php?authType=5', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -93,6 +94,7 @@ $dashboard->render();
                 body: JSON.stringify({employee_id})
             });
         }
+        location.reload()
     }
 
         function updateRoleOptions() {
@@ -123,7 +125,7 @@ $dashboard->render();
     function fetchEmployeeDetails() {
         const employeeId = document.getElementById('employee-id').value;
 
-        var employeeData = fetch('/auth/auth.php?authType=6&id=' + employeeId)
+        var employeeData = fetch('../auth/auth.php?authType=6&id=' + employeeId)
 .then(response => response.text()).
 then(data => {
     data = JSON.parse(data);
@@ -164,14 +166,14 @@ then(data => {
         function deleteTask(taskId) {
             var real_id = taskId.split('-');
             real_id = real_id[1];
-            fetch('/auth/auth.php?authType=8', {
+            fetch('../auth/auth.php?authType=8', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({task_id: real_id})
             });
-            window.location.href = "/admin/adminDashboard.php";
+            window.location.href = "adminDashboard.php";
 
         }
         // Function to edit a task
@@ -195,8 +197,7 @@ then(data => {
                     </select>
                     <label>Proponent:</label>
                     <input type="text" id="edit-proponent" value="${proponent}">
-                    <label>Department:</label>
-                    <input type="text" id="edit-department" value="${department}">
+                </select>
                     <div class="btn-container">
                         <button onclick="saveEditTask('${taskId}')">Save</button>
                         <button onclick="cancelEditTask('${taskId}')">Cancel</button>
@@ -235,7 +236,7 @@ then(data => {
                 priorityClass = 'LOW';
             }
             
-            fetch('/auth/auth.php?authType=7', {
+            fetch('../auth/auth.php?authType=7', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -243,7 +244,7 @@ then(data => {
                 body: JSON.stringify({task_id: real_id, task_name: newTitle, priority: priorityClass, user_id: newProponent, Department: newDepartment})
             });
 
-            window.location.href = "/admin/adminDashboard.php";
+            window.location.href = "adminDashboard.php";
         }
 
         // Function to cancel task edit
@@ -261,9 +262,9 @@ then(data => {
 
 <script>
     function consolidateFormDataCreate() {
-        const taskName = document.getElementById('first-name').value;
-        const priorityLevel = document.getElementById('prioritylvl').value;
-        const user_id = document.getElementById('assign-task').value;
+        const taskName = document.getElementById('task_name').value;
+        const priorityLevel = document.getElementById('priority').value;
+        const user_id = document.getElementById('empId').value;
         const deadline = document.getElementById('deadline').value;
 
         var priorityClass = '';
@@ -287,7 +288,7 @@ then(data => {
         if (confirmAdd) {
             const formData = consolidateFormDataCreate();
             console.log(formData);
-            fetch('/auth/auth.php?authType=9', {
+            fetch('../auth/auth.php?authType=9', {
                 method: 'POST',
                 body: JSON.stringify(formData)
             });
@@ -299,22 +300,23 @@ then(data => {
 
 <script>
     async function processEmployeeName(){
-        const empName = document.getElementById('emp-name').value;
+        const form = document.getElementById('form1');
         const limit = 10;
-        
+        formData = new FormData(form);
         // get the task assigned to the employee
         // returns a mysql result object
         var element = document.getElementById('task-table-body');
         element.innerHTML = '';
 
-        var tasks = await fetch('/auth/auth.php?authType=10', {
+        var tasks = fetch('../auth/auth.php?authType=10', {
             method: 'POST',
-            body: JSON.stringify({empId: empName, limit})
+            body: formData
         }).then(response => response.text())
         .then(data => {
-            data = JSON.parse(data);
-            console.log(data);
+            // alert(`Processing Employee ID:`);
+
             data.forEach(task => {
+
                 priorityClass = '';
                 if (task.priority === 'HIGH') {
                     priorityClass = 'high-priority';
@@ -323,18 +325,21 @@ then(data => {
                 } else {
                     priorityClass = 'low-priority';
                 }
-                element.innerHTML += `
-                    <tr id="task-${task.task_id}">
-                        <td>${task.task_name}</td>
-                        <td>${task.deadline}</td>
-                        <td class="${priorityClass}">${task.priority}</td>
-                        <td>${task.department}</td>
-                        <td>${task.user_id}</td>
-                        <td>${task.status}</td>
-                    </tr>
-                `;
+
+                // element.innerHTML += `
+                //     <tr id="task-${task.task_id}">
+                //         <td>${task.task_name}</td>
+                //         <td>${task.deadline}</td>
+                //         <td class="${priorityClass}">${task.priority}</td>
+                //         <td>${task.department}</td>
+                //         <td>${task.user_id}</td>
+                //         <td>${task.status}</td>
+                //     </tr>
+                // `;
+
             })
-});
+        });
+
     }
 </script>
 

@@ -9,7 +9,7 @@
         header('Location: /auth/login.php');
         exit;
     }
-    require_once($_SERVER['DOCUMENT_ROOT'] . '/pldt-smart-internship-proj-main/updated/auth/auth.php');
+    require_once('../auth/auth.php');
     $db = Database::getInstance();
     $db->initializeAssignedTasks($_SESSION['empId']);
 ?>
@@ -131,26 +131,30 @@
                 <h2>Full Name</h2>
             </div>
 
-        <div class="form-container" >
-            <form class="form-group" id="fname-form">
+        <form class="form-container" id="form1">
+            <div class="form-group" id="fname-form">
                 <label for="first-name">First Name</label>
                 <input type="text" id="first-name" name="fname" placeholder="First Name">
-            </form>
-            <form class="form-group" id="lname-form">
+            </div>
+            <div class="form-group" id="lname-form">
                 <label for="last-name">Last Name</label>
                 <input type="text" id="last-name" name="lname" placeholder="Last Name">
-            </form>
+            </div>
+            <div class="form-group" id="password-form">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password">
+            </div>
             <div class="form-section">
                 <h2>Contact Information</h2>
             </div>
-            <form class="form-group full-width" id="email-form">
+            <div class="form-group full-width" id="email-form">
                 <label for="email">Email Address</label>
                 <input type="email" id="email" name="email" placeholder="Email Address">
-            </form>
+            </div>
             <div class="form-section">
                 <h2>Position and Department Information</h2>
             </div>
-            <form class="form-group" id="department-form">
+            <div class="form-group" id="department-form">
                 <label for="department">Department</label>
                 <select id="department" name="department" onchange="updateRoleOptions()">
                     <option value="">Select Department</option>
@@ -159,21 +163,21 @@
                     <option value="cybersecurity">Cybersecurity</option>
                     <!-- Add more options as needed -->
                 </select>
-            </form>
-            <form class="form-group" id="position-form">
+            </div>
+            <div class="form-group" id="position-form">
                 <label for="position">Position</label>
                 <select id="position" name="position">
                     <option value="">Select Position</option>
                     <!-- Options will be populated based on department selection -->
                 </select>
-            </form>
+            </div>
             <div class="form-group">
                 <button type="button" onclick="addEmployee()">Add Employee</button>
                 <a href="#" class="menu-item" id="empPool" onclick="loadContent('empPool'); return false;">
                     Back
                 </a>
             </div>
-        </div>
+        </form>
     </main>
 </body>
 </html>

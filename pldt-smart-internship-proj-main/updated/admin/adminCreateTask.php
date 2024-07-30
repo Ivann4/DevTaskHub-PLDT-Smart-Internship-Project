@@ -107,28 +107,36 @@
             }
         }
 
-        function addTask() {
-            const confirmAdd = confirm("Are you sure you want to add this task to the system?");
-            if (confirmAdd) {
-                alert("Task added to the system!");
-                // mode code hereeeee
-            }
-        }
+        // function addTask() {
+        //     const confirmAdd = confirm("Are you sure you want to add this task to the system?");
+        //     if (confirmAdd) {
+        //         const form1 = document.getElementById('form1');
+        //         const formData = new FormData(form1);
+        //         console.log('fnk logg');
+        //         fetch('auth.php?authType=9', {
+        //             method: 'POST',
+        //             body: formData
+        //         });
+
+        //         alert("Task added to the system!");
+        //         // mode code hereeeee
+        //     }
+        // }
     </script>
 </head>
 <body>
     <main class="main">
-        <div class="form-container">
+        <form id="form1" class="form-container">
             <div class="form-section">
                 <h2>Create Task</h2>
             </div>
             <div class="form-group">
                 <label for="first-name">Task Name</label>
-                <input type="text" id="first-name" name="first_name" placeholder="ex: Process Template">
+                <input type="text" id="task_name" name="task_name" placeholder="ex: Process Template">
             </div>
             <div class="form-group">
                 <label for="middle-name">Priority Level</label>
-                <select id="prioritylvl" name="priority-level">
+                <select id="priority" name="priority">
                     <option value="">-- Select Priority Level --</option>
                     <option value="Low">Low Priority !</option>
                     <option value="Moderate">Moderate Priority !!</option>
@@ -137,11 +145,11 @@
             </div>
             <div class="form-group full-width">
                 <label for="address">Assign Task to (Employee ID)</label>
-                <input type="text" id="assign-task" name="assign-task" placeholder="1">
+                <input type="text" id="empId" name="empId" placeholder="1">
             </div>
             <div class="form-group">
                 <label for="reports-to">Task Deadline</label>
-                <input type="Date" id="deadline">
+                <input type="Date" id="deadline" name="deadline">
             </div>
             <div class="form-group">
                 <button type="button" onclick="addTask()">Add Task</button>
@@ -149,7 +157,7 @@
                     Back
                 </a>
             </div>
-        </div>
+        </form>
     </main>
 </main>
 

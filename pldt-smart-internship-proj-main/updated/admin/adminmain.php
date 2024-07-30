@@ -10,7 +10,7 @@
         exit;
     }
 
-    require_once($_SERVER['DOCUMENT_ROOT'] . '/pldt-smart-internship-proj-main/updated/auth/auth.php');
+    require_once('../auth/auth.php');
     $db = Database::getInstance();
     $db->initializeAssignedTasks($_SESSION['empId']);
 ?>
@@ -32,14 +32,14 @@
                     <?php echo $db->getCyberSecurityTasks();?>
                 </div>
             </div>
-            <div class="deadlines-header">
+            <!-- <div class="deadlines-header">
                 <h2><b>My Deadlines</b></h2>
-            </div>
+            </div> -->
             <div class="deadlines">
             <script>
                 
                 function fetchTasks(){
-                    fetch('/auth/auth.php?authType=2').then(response => response.text()).then(data => {
+                    fetch('../auth/auth.php?authType=2').then(response => response.text()).then(data => {
                         document.querySelector('.deadlines').innerHTML = data;
                     });
                 }
